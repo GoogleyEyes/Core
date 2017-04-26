@@ -199,3 +199,60 @@ extension JSON {
         return returnVal
     }
 }
+
+// [String: T]
+extension JSON {
+    public func toModelDictionary<T: FromJSON>() -> [String: T]? {
+        let dict = self.dictionary
+        let returnValSet = dict?.flatMap { (item: (key: String, value: JSON)) -> (String, T)? in
+            return (item.key, T(json: item.value))
+        }
+        var returnVal: [String: T]? = [:]
+        for (key, value) in returnValSet! {
+            returnVal?[key] = value
+        }
+        
+        return returnVal
+    }
+    
+    public func toModelDictionaryValue<T: FromJSON>() -> [String: T] {
+        let dict = self.dictionaryValue
+        let returnValSet = dict.flatMap { (item: (key: String, value: JSON)) -> (String, T)? in
+            return (item.key, T(json: item.value))
+        }
+        
+        var returnVal: [String: T] = [:]
+        for (key, value) in returnValSet {
+            returnVal[key] = value
+        }
+        
+        return returnVal
+    }
+}
+// [T]
+extension JSON {
+    public func toModelArrayValue<T: FromJSON>() -> [T] {
+        let array = arrayValue
+        let returnVal: [T] = array.flatMap {
+            return T(json: $0)
+        }
+        return returnVal
+    }
+    public func toModelArray<T: FromJSON>() -> [T]? {
+        let array = self.array
+        let returnVal: [T]? = array?.flatMap {
+            return T(json: $0)
+        }
+        return returnVal
+    }
+}
+
+extension JSON {
+    init<T: FromJSON>(modelDict: [String: T]) {
+        var dict = [String: Any]()
+        for (key, value) in modelDict {
+            dict[key] = value.toJSON()
+        }
+        self = JSON(dict)
+    }
+}

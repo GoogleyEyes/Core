@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol GoogleService {
+public protocol GoogleServiceFetcher {
     var apiNameInURL: String { get }
     var apiVersionString: String { get }
     init()

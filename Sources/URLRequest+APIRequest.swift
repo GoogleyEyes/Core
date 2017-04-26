@@ -10,7 +10,7 @@ import Foundation
 
 extension URLRequest {
     init(_ apiRequest: APIRequest) {
-        let urlString = apiRequest.baseURL + "/\(apiRequest.serviceName)/\(apiRequest.apiVersion)/\(apiRequest.endpoint)"
+        let urlString = apiRequest.baseURL + "/\(apiRequest.serviceName)/\(apiRequest.apiVersion)\(apiRequest.endpoint)"
         let url = URL(string: urlString)!
         self.init(url: url)
         
