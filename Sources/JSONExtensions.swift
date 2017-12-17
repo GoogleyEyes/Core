@@ -18,3 +18,21 @@ extension DateFormatter {
         return rfc3339DateFormatter
     }()
 }
+
+extension Bool {
+    var jsonString: String {
+        if self {
+            return "true"
+        } else {
+            return "false"
+        }
+    }
+}
+
+extension JSONDecoder {
+    static var googleyEyes: JSONDecoder {
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .formatted(DateFormatter.rfc3339)
+        return decoder
+    }
+}
