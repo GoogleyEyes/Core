@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import SwiftyJSON
 
 public class NetworkFetcher {
     var request: APIRequest
@@ -20,16 +19,14 @@ public class NetworkFetcher {
         self.session = URLSession(configuration: .default, delegate: self.sessionDelegate, delegateQueue: .main)
     }
     
-    func handleResponse(_ tuple: (Data?,URLResponse?,Error?)) -> Result<JSON> {
+    func handleResponse(_ tuple: (Data?,URLResponse?,Error?)) -> Result<Data> {
         guard tuple.2 == nil else {
             return .error(tuple.2!) // TODO: make richer?
         }
         guard let data = tuple.0 else {
             return .error(NetworkFetcherError.noData)
         }
-        
-        let json = JSON(data: data)
-        return .success(json)
+        return .success(data)
     }
     
     func handleResponseURL(_ tuple: (URL?,URLResponse?,Error?)) -> Result<URL> {
@@ -44,7 +41,7 @@ public class NetworkFetcher {
     }
     
     
-    public func execute(completion: @escaping (Result<JSON>) -> ()) {
+    public func execute(completion: @escaping (Result<Data>) -> ()) {
         
         guard !(request.isFileDownload) else {
             completion(.error("wrong function: use executeDownload()"))

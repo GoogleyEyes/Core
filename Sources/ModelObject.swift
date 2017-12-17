@@ -7,25 +7,11 @@
 //
 
 import Foundation
-import SwiftyJSON
 
-public protocol FromJSON {
-    init(json: JSON)
-    
-    func toJSON() -> JSON
-}
-
-public protocol ObjectType: FromJSON { }
+public protocol ObjectType: Codable { }
 
 public protocol ModelObject: ObjectType {
     var kind: String { get }
-}
-
-extension ModelObject {
-    public init(json: JSON) {
-        self.init(json: json)
-        guard json["kind"].string == kind  else { fatalError("Wrong model object type, should be \(json["kind"].stringValue)") }
-    }
 }
 
 public protocol ListType: ObjectType, Sequence {
